@@ -2,13 +2,14 @@
 "use server";
 
 import { PDFParse } from "pdf-parse";
-import { db } from "@/lib/db-config";
+import { getDb } from "@/lib/db-config";
 import { documents } from "@/lib/db-schema";
 import { generateEmbeddings } from "@/lib/embeddings";
 import { chunkContent } from "@/lib/chunking";
 
 export async function processPdfFile(formData: FormData) {
   try {
+    const db = getDb();
     const file = formData.get("pdf") as File;
 
     // Convert File to Buffer and extract text
