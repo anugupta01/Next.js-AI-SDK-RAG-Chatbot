@@ -1,20 +1,22 @@
 // src/app/upload/actions.ts
 "use server";
 
-import pdf from "pdf-parse";
-import { db } from "@/lib/db-config";
+import { PDFParse } from "pdf-parse";
+import { getDb } from "@/lib/db-config";
 import { documents } from "@/lib/db-schema";
 import { generateEmbeddings } from "@/lib/embeddings";
 import { chunkContent } from "@/lib/chunking";
 
 export async function processPdfFile(formData: FormData) {
   try {
+    const db = getDb();
     const file = formData.get("pdf") as File;
 
     // Convert File to Buffer and extract text
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
-    const data = await pdf(buffer);
+    const parser = new PDFParse({ data: buffer });
+    const data = await parser.getText();
 
     if (!data.text || data.text.trim().length === 0) {
       return {

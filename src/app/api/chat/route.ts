@@ -50,7 +50,7 @@ export async function POST(req: Request) {
 
     const result = streamText({
       model: openai("gpt-5-mini"),
-      messages: convertToModelMessages(messages),
+      messages: await convertToModelMessages(messages),
       tools,
       system: `You are a helpful assistant with access to a knowledge base. 
           When users ask questions, search the knowledge base for relevant information.

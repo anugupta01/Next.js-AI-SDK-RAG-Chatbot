@@ -1,6 +1,6 @@
 // src/lib/search.ts
 import { cosineDistance, desc, gt, sql } from "drizzle-orm";
-import { db } from "./db-config";
+import { getDb } from "./db-config";
 import { documents } from "./db-schema";
 import { generateEmbedding } from "./embeddings";
 
@@ -12,6 +12,8 @@ export async function searchDocuments(
   limit: number = 5,
   threshold: number = 0.5
 ) {
+  const db = getDb();
+
   // Generate embedding for the search query
   const embedding = await generateEmbedding(query);
 
